@@ -53,7 +53,7 @@ public class Employee {
         return e_password;
     }
 
-    public void setPassword(String e_password) {
+    public void setEmployeePassword(String e_password) {
         this.e_password = e_password;
     }
 
@@ -63,7 +63,6 @@ public class Employee {
                 "Username=" + e_username +
                 ", EmployeeName='" + e_name +
                 ", EmployeeEmail='" + e_email +
-                ", EmployeeRole='" + e_role + '\'' +
                 ", EmployeeRole=" + e_role +
                 '}';
     }
@@ -73,7 +72,7 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return e_username == employee.e_username && Object.equals(e_email, employee, employee.e_email) && Boolean.equals(employee.e_role, e_role) == null && Objects.equals(e_name, employee.e_name) && Objects.equals(e_password, employee.e_password);
+        return e_username == employee.e_username && e_email == employee.e_email && e_role == employee.e_role && e_name == employee.e_name && e_password == employee.e_password;
     }
 
     @Override
