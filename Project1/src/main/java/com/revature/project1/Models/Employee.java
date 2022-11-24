@@ -1,19 +1,22 @@
 package com.revature.project1.Models;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+
 import java.util.Objects;
+
 
 public class Employee {
 
     private String e_username;
-    private boolean e_role;
     private String e_email;
     private String e_name;
     private String e_password;
+    private UserRole e_role;
 
     public Employee() {
     }
 
-    public Employee(String e_username, boolean e_role, String e_email, String e_name, String e_password) {
+    public Employee(String e_username, UserRole e_role, String e_email, String e_name, String e_password) {
         this.e_username = e_username;
         this.e_role = e_role;
         this.e_email = e_email;
@@ -26,14 +29,15 @@ public class Employee {
         return e_username;
     }
 
-    public void setEmployeeUsername(String e_username) { this.e_username = e_username;
+    public void setEmployeeUsername(String e_username) {
+        this.e_username = e_username;
     }
 
-    public boolean getEmployeeRole() {
+    public UserRole getEmployeeRole() {
         return e_role;
     }
 
-    public void setEmployeeRole(boolean e_role) {
+    public void setEmployeeRole(UserRole e_role) {
         this.e_role = e_role;
     }
 
@@ -45,9 +49,13 @@ public class Employee {
         this.e_email = e_email;
     }
 
-    public String getEmployeeName() { return e_name; }
+    public String getEmployeeName() {
+        return e_name;
+    }
 
-    public void setEmployeeName(String e_name){ this.e_name = e_name; }
+    public void setEmployeeName(String e_name){
+        this.e_name = e_name;
+    }
 
     public String getEmployeePassword() {
         return e_password;
@@ -55,6 +63,22 @@ public class Employee {
 
     public void setEmployeePassword(String e_password) {
         this.e_password = e_password;
+    }
+
+    public boolean isExistingUsername() {
+            return e_username != null && e_password != null;
+        }
+
+    public boolean isCorrectPassword(Employee employee) {
+        if (employee == null) return false;
+
+        if (employee.getEmployeePassword() == null) return false;
+
+        return this.e_password != null && this.e_password.equals(employee.getEmployeePassword());
+    }
+
+    public boolean isValidUser() {
+        return (this.e_username != null) & (this.e_password != null);
     }
 
     @Override
@@ -65,19 +89,4 @@ public class Employee {
                 ", EmployeeEmail='" + e_email +
                 ", EmployeeRole=" + e_role +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Employee employee = (Employee) o;
-        return e_username == employee.e_username && e_email == employee.e_email && e_role == employee.e_role && e_name == employee.e_name && e_password == employee.e_password;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(e_username, e_name, e_email, e_role, e_password);
-    }
-
-}
+    }}

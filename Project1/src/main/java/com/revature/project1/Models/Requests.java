@@ -6,12 +6,12 @@ public class Requests {
         private String r_status;
         private int r_amount;
         private String r_type;
-        private String r_requester;
+        private Employee r_requester;
 
         public Requests() {
         }
 
-        public Requests(int r_id, String r_status, int r_amount, String r_type, String r_requester) {
+        public Requests(int r_id, String r_status, int r_amount, String r_type, Employee r_requester) {
             this.r_id = r_id;
             this.r_status = r_status;
             this.r_amount = r_amount;
@@ -21,37 +21,34 @@ public class Requests {
 
 
 
-        public int getRequesterID() {
-            return r_id;
-        }
+        public int getRequestID() { return r_id; }
 
-        public void setRequesterID(int r_id) {
-            this.r_id = r_id;
-        }
+        public void setRequestID(int r_id) { this.r_id = r_id;}
 
-        public String getStatus() {
+        public String getRequestStatus() {
             return r_status;
         }
 
-        public void setStatus(String r_status) {
+        public void setRequestStatus(String r_status) {
             this.r_status = r_status;
         }
 
-        public int getAmount() {
+        public int getRequestAmount() {
             return r_amount;
         }
 
-        public void setAmount(int r_amount) {
+        public void setRequestAmount(int r_amount) {
             this.r_amount = r_amount;
         }
 
-        public String getType() {return r_type; }
+        public String getRequestType() {return r_type; }
 
-        public void setType(String r_type) { this.r_type = r_type; }
+        public void setRequestType(String r_type) { this.r_type = r_type; }
 
-        public String getRequester() { return r_requester; }
+        public Employee getRequestRequester() { return r_requester; }
 
-        public void setRequester(String r_requester) { this.r_requester = r_requester; }
+        public void setRequestRequester(Employee r_requester) { this.r_requester = r_requester; }
+
 
 
 }
