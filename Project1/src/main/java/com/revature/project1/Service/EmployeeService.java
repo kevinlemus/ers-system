@@ -1,14 +1,16 @@
-package com.revature.project1.Controller.Service;
+package com.revature.project1.Service;
 
 import com.revature.project1.DAO.EmployeeDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
+import com.revature.project1.Models.UserRole;
+import com.revature.project1.Util.DTO.LoginCreds;
 
 import java.util.List;
 
 public class EmployeeService {
 
-    private Employee sessionEmployee = null;
+    private Employee sessionEmployee = null;//defaults an inactive website user
     private final EmployeeDAO employeeDAO;
 
     public EmployeeService(EmployeeDAO employeeDAO){
@@ -16,12 +18,8 @@ public class EmployeeService {
     }
 
     //    overloaded method (method with the same name but different parameters)
-    public Employee addEmployee(Employee employee){
+    public Employee registerEmployee(Employee employee){
         return employeeDAO.create(employee);
-    }
-
-    public Employee getEmployee(String employeeName){
-        return null;
     }
 
     public void removeEmployee(String employeeUsername){
@@ -36,9 +34,10 @@ public class EmployeeService {
         return null;
     }
 
-    public void login(String employeeEmail, String employeePassword){
-        // TODO: IMPLEMENT ME WITH DAO
-        sessionEmployee = employeeDAO.loginCheck(employeeEmail, employeePassword);
+    public Employee login(LoginCreds loginCreds){
+        if(sessionEmployee != null) return null;//if the session employee isn't null return nothing.
+        sessionEmployee = employeeDAO.loginCheck(loginCreds.getEmployeeUsername(), loginCreds.getEmployeePassword());
+        return sessionEmployee;
     }
 
     public void logout(){
@@ -47,6 +46,11 @@ public class EmployeeService {
 
     public Employee getSessionEmployee(){
         return sessionEmployee;
+    }
+
+    public boolean isNotManager() {
+        if(sessionEmployee == null) return true;
+        return sessionEmployee.getEmployeeRole() != UserRole.MANAGER;
     }
 
 

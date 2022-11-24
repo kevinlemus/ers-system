@@ -1,49 +1,48 @@
-package com.revature.project1.Controller.Service;
+package com.revature.project1.Service;
 
+import com.revature.project1.DAO.RequestDAO;
+import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RequestService {
 
-    List<Requests> requestsList;
+    private Requests sessionRequest = null;
 
-    public MenuItemService(){
-        menuItemList = new ArrayList<>();
+    private Employee sessionEmployee = null;
+    private final RequestDAO requestDAO;//RequestDAO object
+
+    private int requestCount = 0;
+
+
+    public RequestService(RequestDAO requestDAO){
+        this.requestDAO = requestDAO;//whenever we want to initiate a request service, we need to provide it with the request DAO.
     }
 
-    public void addCMenuItem(String name, double balance){
-        MenuItem newMenuItem = new MenuItem(name, balance);
-        menuItemList.add(newMenuItem);
-    }
-    //    overloaded method (method with the same name but different parameters)
-    public void addCustomer(MenuItem customer){
-        menuItemList.add(customer);
+    public Requests submitRequest(Requests request, Employee employee){
+        request.setRequestRequester(employee);
+        request.setRequestID(requestCount++);
+        return requestDAO.create(request);
+
     }
 
-    public MenuItem getMenuItem(String name){
-        for(int i = 0; i < menuItemList.size(); i++){
-            MenuItem c = menuItemList.get(i);
-            if(c.getItemName().equals(name)){
-                return menuItemList.get(i);
-            }
-        }
-        return null;
+
+
+   // public Requests submit(Requests request){
+        // TODO: IMPLEMENT ME WITH DAO
+      //  sessionRequest = null; // employeeDAO.loginCheck(employeeEmail, employeePassword);
+   // }
+
+    public void close(){
+        sessionRequest = null;
     }
 
-    public void removeMenuItem(String name){
-        for(int i = 0; i < menuItemList.size(); i++){
-            MenuItem c = menuItemList.get(i);
-            if(c.getItemName().equals(name)){
-                menuItemList.remove(i);
-            }
-        }
+    public Requests getEmployeeRequest(){
+        return sessionRequest;
     }
 
-    public List<MenuItem> getAllMenuItems() {
-        return menuItemList;
-    }
 
-}
 
 }

@@ -1,5 +1,8 @@
 package com.revature.project1.Util.Interface;
 
+import com.revature.project1.Models.Employee;
+import com.revature.project1.Models.Requests;
+
 import java.util.List;
 
 public interface Crudable<T> {
@@ -9,12 +12,17 @@ public interface Crudable<T> {
 
     // Read
     List<T> findAll();
-    T findByEmail(String employeeEmail);
+
+    Employee findByEmail(String employeeEmail);
+
+    Requests findByRequestID(int requestID);
 
     // Update
     boolean update(T updatedObject);
 
     // Delete
-    boolean delete(String EmployeeEmail);
 
+    boolean delete(String deletedObject);
+
+    boolean delete(int requestID);
 }

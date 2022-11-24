@@ -30,10 +30,6 @@ public class ConnectionFactory {
         }
     }
 
-    /**
-     * The purpose is for anywhere in the program to request access to the single connection factory object
-     * @return our singleton connection factory object
-     */
     public static ConnectionFactory getConnectionFactory(){
         return connectionFactory;
     }
