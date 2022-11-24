@@ -3,7 +3,6 @@ package com.revature.project1.Controller.Service;
 import com.revature.project1.DAO.EmployeeDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
-import org.eclipse.jetty.server.Request;
 
 import java.util.List;
 
@@ -37,9 +36,9 @@ public class EmployeeService {
         return null;
     }
 
-    public void login(String employeeEmail, String employeePassword, boolean employeeRole){
+    public void login(String employeeEmail, String employeePassword){
         // TODO: IMPLEMENT ME WITH DAO
-        sessionEmployee = employeeDAO.loginCheck(employeeEmail, employeePassword, employeeRole);
+        sessionEmployee = employeeDAO.loginCheck(employeeEmail, employeePassword);
     }
 
     public void logout(){

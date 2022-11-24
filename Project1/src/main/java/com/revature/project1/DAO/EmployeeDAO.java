@@ -1,42 +1,47 @@
 package com.revature.project1.DAO;
 
 import com.revature.project1.Models.Employee;
+import com.revature.project1.Models.Requests;
+import com.revature.project1.Models.UserRole;
 import com.revature.project1.Util.ConnectionFactory;
 import com.revature.project1.Util.Exceptions.InvalidEmployeeInputException;
 import com.revature.project1.Util.Interface.Crudable;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class EmployeeDAO implements Crudable<Employee> {
 
 
     @Override
-    public Employee create(Employee newEmployee) {
+    public Employee create(Employee newEmployee) {//function for registering an employee
 
-        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
 
-
-            String sql = "insert into employee (e_username, e_role, e_email, e_name, e_name, e_password) values (?, ?, ?, ?, ?, ?)";
+            //string "sql" will be used as a function to insert the wanted information into your database.
+            String sql = "insert into employee (e_username, e_email, e_name, e_password) values (?, ?, ?, ?)";
             // PreparedStatements prevent SQL injection
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);//the preparedStatement will be the information input into the function above.
 
             // set the information for the ?
             preparedStatement.setString(1, newEmployee.getEmployeeUsername());
-            preparedStatement.setBoolean(2, newEmployee.getEmployeeRole());
-            preparedStatement.setString(3,newEmployee.getEmployeeEmail());
-            preparedStatement.setString(4, newEmployee.getEmployeeName());
-            preparedStatement.setString(5, newEmployee.getEmployeePassword());
+            //preparedStatement.setString(2, newEmployee.getEmployeeRole());
+            preparedStatement.setString(2, newEmployee.getEmployeeEmail());
+            preparedStatement.setString(3, newEmployee.getEmployeeName());
+            preparedStatement.setString(4, newEmployee.getEmployeePassword());
 
-            int checkInsert = preparedStatement.executeUpdate();
+            int checkInsert = preparedStatement.executeUpdate();//this is counting the updates done. sql table will not properly update if the key, username, already exists.
 
-            if(checkInsert == 0){
-                throw new RuntimeException("Employee was not added to database");
+            if (checkInsert == 0) {//checkInsert equaling 0 means no updates were made
+                throw new RuntimeException("Employee was not created");//if no updates were made then no employee was created.
             }
 
-            return newEmployee;
+            return newEmployee;//if an update was made, then the given information was successfully inserted(added/registered) into the sql database
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
@@ -58,41 +63,55 @@ public class EmployeeDAO implements Crudable<Employee> {
     }
 
     @Override
-    public boolean delete(String employeeEmail) {
+    public boolean delete(String deletedObject) {
         return false;
     }
 
-    public Employee loginCheck(String employeeEmail, String employeePassword, boolean employeeRole){
+    @Override
+    public Requests findByRequestID(int requestID) {
+        return null;
+    }
 
-        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()){
+    @Override
+    public boolean delete(int requestID) {
+        return false;
+    }
 
-            String sql = "select * from employee where e_email = ? and e_password = ? and e_role = ?";
+    public Employee loginCheck(String employeeUsername, String employeePassword) {
 
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, employeeEmail);
-            preparedStatement.setString(2, employeePassword);
-            preparedStatement.setBoolean(3, employeeRole);
+        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
 
-            ResultSet resultSet = preparedStatement.executeQuery();
+            String sql = "select * from employee where e_username = ? and e_password = ?";//statement we will apply to our sql table
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);//preparedStatement is being activated with the sql string above.
 
-            if(!resultSet.next()){
-                throw new InvalidEmployeeInputException("The entered information for " + employeeEmail + "was incorrect. Please try again");
+            preparedStatement.setString(1, employeeUsername);//this username will be used for the first question mark to execute the command
+            preparedStatement.setString(2, employeePassword);//this password will be used for the second question mark to execute the command
+
+            ResultSet resultSet = preparedStatement.executeQuery();//these are the results of what is brought back with the strings above put into the sql statement
+
+            if (!resultSet.next()) {
+                throw new InvalidEmployeeInputException("The entered information was incorrect. Please try again");//nothing was retrieved with the given inputs, the loginCheck will tell you to try again.
             }
+
 
             Employee employee = new Employee();
 
             employee.setEmployeeUsername(resultSet.getString("e_username"));
-            employee.setEmployeeRole(resultSet.getBoolean("e_role"));
-            employee.setEmployeeEmail(resultSet.getString("e_email"));
-            employee.setEmployeeName(resultSet.getString("e_name"));
+            employee.setEmployeeRole(UserRole.valueOf(resultSet.getString("e_role")));
+            //employee.setEmployeeEmail(resultSet.getString("e_email"));
+            //employee.setEmployeeName(resultSet.getString("e_name"));
             employee.setEmployeePassword(resultSet.getString("e_password"));
 
-            return employee;
+            return employee;// a new session will begin with the information of the username and password that was inputted.
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
     }
 }
+
+
+
+
