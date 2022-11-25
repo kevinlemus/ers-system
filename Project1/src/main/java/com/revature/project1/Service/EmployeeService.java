@@ -3,9 +3,9 @@ package com.revature.project1.Service;
 import com.revature.project1.DAO.EmployeeDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
-import com.revature.project1.Models.UserRole;
 import com.revature.project1.Util.DTO.LoginCreds;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EmployeeService {
@@ -18,8 +18,31 @@ public class EmployeeService {
     }
 
     //    overloaded method (method with the same name but different parameters)
-    public Employee registerEmployee(Employee employee){
-        return employeeDAO.create(employee);
+    public Employee registerEmployee(Employee newEmployee){
+        return employeeDAO.create(newEmployee);
+      // List<Employee> employees = employeeDAO.findAll();
+       // List<String> usernames = new ArrayList<>();
+      //  int temp = 0;
+
+     //   for (int i = 0; i < employees.size(); i++) {
+      //      usernames.add(employees.get(i).getEmployeeUsername());
+      //  }
+
+    //    if (newEmployee.getEmployeePassword() != null && newEmployee.getEmployeeUsername() != null) { //if password and username filled out
+
+     //       if (usernames.contains(newEmployee.getEmployeeUsername())) { //username already registered
+    //            temp = 1;
+    //        } else {
+   //             employeeDAO.create(newEmployee); //success
+   //             temp = 2;
+   //         }
+    //    }
+     //   return temp;
+    }
+
+    public boolean isManager(){
+        if(sessionEmployee==null) return false;
+        return !sessionEmployee.getEmployeeRole();
     }
 
     public void removeEmployee(String employeeUsername){
@@ -48,10 +71,6 @@ public class EmployeeService {
         return sessionEmployee;
     }
 
-    public boolean isNotManager() {
-        if(sessionEmployee == null) return true;
-        return sessionEmployee.getEmployeeRole() != UserRole.MANAGER;
-    }
 
 
 }

@@ -2,53 +2,54 @@ package com.revature.project1.Models;
 
 public class Requests {
 
-        private int r_id;
-        private String r_status;
-        private int r_amount;
-        private String r_type;
-        private Employee r_requester;
+        private int requestID;
+        private String requestStatus;
+        private int requestAmount;
+        private String requestType;
+        private Employee requestRequester;
 
         public Requests() {
         }
 
-        public Requests(int r_id, String r_status, int r_amount, String r_type, Employee r_requester) {
-            this.r_id = r_id;
-            this.r_status = r_status;
-            this.r_amount = r_amount;
-            this.r_type = r_type;
-            this.r_requester = r_requester;
+        public Requests(int requestID, String requestStatus, int requestAmount, String requestType, Employee requestRequester) {
+            this.requestID = requestID;
+            this.requestStatus = requestStatus;
+            this.requestAmount = requestAmount;
+            this.requestType = requestType;
+            this.requestRequester = requestRequester;
         }
 
 
 
-        public int getRequestID() { return r_id; }
+        public int getRequestID() { return requestID; }
 
-        public void setRequestID(int r_id) { this.r_id = r_id;}
+        public void setRequestID(int requestID) { this.requestID = requestID;}
 
         public String getRequestStatus() {
-            return r_status;
+            return requestStatus;
         }
 
-        public void setRequestStatus(String r_status) {
-            this.r_status = r_status;
+        public void setRequestStatus(String requestStatus) {
+            this.requestStatus = requestStatus;
         }
 
         public int getRequestAmount() {
-            return r_amount;
+            return requestAmount;
         }
 
-        public void setRequestAmount(int r_amount) {
-            this.r_amount = r_amount;
+        public void setRequestAmount(int requestAmount) {
+            this.requestAmount = requestAmount;
         }
 
-        public String getRequestType() {return r_type; }
+        public String getRequestType() {return requestType; }
 
-        public void setRequestType(String r_type) { this.r_type = r_type; }
+        public void setRequestType(String r_type) { this.requestType = requestType; }
 
-        public Employee getRequestRequester() { return r_requester; }
+        public Employee getRequestRequester() { return requestRequester; }
 
-        public void setRequestRequester(Employee r_requester) { this.r_requester = r_requester; }
+        public void setRequestRequester(Employee requestRequester) { this.requestRequester = requestRequester; }
 
 
 
-}
+
+        }

@@ -16,9 +16,10 @@ public class Application {
         RequestService requestService = new RequestService(requestDAO);
         EmployeeService employeeService = new EmployeeService(employeeDAO);
 
-        Javalin app = Javalin.create().start(8100);
+        Javalin app = Javalin.create().start(8080);
 
         new EmployeeController(app).employeeEndpoint();
+
         RequestController requestController = new RequestController(requestService, employeeService);
 
         requestController.requestEndpoint(app);

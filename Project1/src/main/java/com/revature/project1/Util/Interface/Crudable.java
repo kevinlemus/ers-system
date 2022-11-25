@@ -17,6 +17,8 @@ public interface Crudable<T> {
 
     Requests findByRequestID(int requestID);
 
+    Requests findByRequestType(Requests requestType);
+
     // Update
     boolean update(T updatedObject);
 

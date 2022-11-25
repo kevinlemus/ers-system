@@ -1,4 +1,5 @@
 package com.revature.project1.Models;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 
@@ -7,86 +8,88 @@ import java.util.Objects;
 
 public class Employee {
 
-    private String e_username;
-    private String e_email;
-    private String e_name;
-    private String e_password;
-    private UserRole e_role;
+    private String employeeUsername;
+
+    private boolean employeeRole;
+
+    private String employeeEmail;
+    private String employeeName;
+    private String employeePassword;
 
     public Employee() {
+
     }
 
-    public Employee(String e_username, UserRole e_role, String e_email, String e_name, String e_password) {
-        this.e_username = e_username;
-        this.e_role = e_role;
-        this.e_email = e_email;
-        this.e_name = e_name;
-        this.e_password = e_password;
+    public Employee(String employeeUsername, String employeeEmail, String employeeName, String employeePassword) {
+        this.employeeUsername = employeeUsername;
+        this.employeeRole = false;
+        this.employeeEmail = employeeEmail;
+        this.employeeName = employeeName;
+        this.employeePassword = employeePassword;
     }
 
 
     public String getEmployeeUsername() {
-        return e_username;
+        return employeeUsername;
     }
 
-    public void setEmployeeUsername(String e_username) {
-        this.e_username = e_username;
+    public void setEmployeeUsername(String employeeUsername) {
+        this.employeeUsername = employeeUsername;
     }
 
-    public UserRole getEmployeeRole() {
-        return e_role;
+    public boolean getEmployeeRole() {
+        return employeeRole;
     }
 
-    public void setEmployeeRole(UserRole e_role) {
-        this.e_role = e_role;
+    public void setEmployeeRole(boolean employeeRole) {
+        this.employeeRole = employeeRole;
     }
 
     public String getEmployeeEmail() {
-        return e_email;
+        return employeeEmail;
     }
 
-    public void setEmployeeEmail(String e_email) {
-        this.e_email = e_email;
+    public void setEmployeeEmail(String employeeEmail) {
+        this.employeeEmail = employeeEmail;
     }
 
     public String getEmployeeName() {
-        return e_name;
+        return employeeName;
     }
 
-    public void setEmployeeName(String e_name){
-        this.e_name = e_name;
+    public void setEmployeeName(String employeeName){
+        this.employeeName = employeeName;
     }
 
     public String getEmployeePassword() {
-        return e_password;
+        return employeePassword;
     }
 
-    public void setEmployeePassword(String e_password) {
-        this.e_password = e_password;
+    public void setEmployeePassword(String employeePassword) {
+        this.employeePassword = employeePassword;
     }
 
-    public boolean isExistingUsername() {
-            return e_username != null && e_password != null;
-        }
+    public boolean isValidInput(Employee employee ) {
+            return (employeeUsername!= null) & (employeePassword != null);}
 
-    public boolean isCorrectPassword(Employee employee) {
-        if (employee == null) return false;
+    public boolean isBlank(Employee employee) {
+            return ((employeeUsername.isBlank()) || (employeePassword.isBlank()) || (employeeUsername.isBlank() && employeePassword.isBlank()));
 
-        if (employee.getEmployeePassword() == null) return false;
-
-        return this.e_password != null && this.e_password.equals(employee.getEmployeePassword());
     }
+
 
     public boolean isValidUser() {
-        return (this.e_username != null) & (this.e_password != null);
+        return (this.employeeUsername != null) & (this.employeePassword != null);
     }
 
     @Override
     public String toString() {
-        return "Employee{" +
-                "Username=" + e_username +
-                ", EmployeeName='" + e_name +
-                ", EmployeeEmail='" + e_email +
-                ", EmployeeRole=" + e_role +
-                '}';
-    }}
+        return
+                "EmployeeUsername=" + employeeUsername +
+                        ", EmployeeName='" + employeeName +
+                        ", EmployeeEmail='" + employeeEmail +
+                        ", EmployeeRole=" + employeeRole +
+                        '}';
+        }
+
+ }

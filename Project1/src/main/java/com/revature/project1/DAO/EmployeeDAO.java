@@ -2,7 +2,6 @@ package com.revature.project1.DAO;
 
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
-import com.revature.project1.Models.UserRole;
 import com.revature.project1.Util.ConnectionFactory;
 import com.revature.project1.Util.Exceptions.InvalidEmployeeInputException;
 import com.revature.project1.Util.Interface.Crudable;
@@ -22,16 +21,17 @@ public class EmployeeDAO implements Crudable<Employee> {
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
 
             //string "sql" will be used as a function to insert the wanted information into your database.
-            String sql = "insert into employee (e_username, e_email, e_name, e_password) values (?, ?, ?, ?)";
+            String sql = "insert into employee (e_username, e_password, e_role) values (?, ?, ?)";
             // PreparedStatements prevent SQL injection
             PreparedStatement preparedStatement = connection.prepareStatement(sql);//the preparedStatement will be the information input into the function above.
 
             // set the information for the ?
             preparedStatement.setString(1, newEmployee.getEmployeeUsername());
-            //preparedStatement.setString(2, newEmployee.getEmployeeRole());
-            preparedStatement.setString(2, newEmployee.getEmployeeEmail());
-            preparedStatement.setString(3, newEmployee.getEmployeeName());
-            preparedStatement.setString(4, newEmployee.getEmployeePassword());
+            //preparedStatement.setString(3, newEmployee.getEmployeeEmail());
+           // preparedStatement.setString(4, newEmployee.getEmployeeName());
+            preparedStatement.setString(2, newEmployee.getEmployeePassword());
+            preparedStatement.setBoolean(3, newEmployee.getEmployeeRole());
+
 
             int checkInsert = preparedStatement.executeUpdate();//this is counting the updates done. sql table will not properly update if the key, username, already exists.
 
@@ -77,6 +77,11 @@ public class EmployeeDAO implements Crudable<Employee> {
         return false;
     }
 
+    @Override
+    public Requests findByRequestType(Requests requestType){
+        return null;
+    }
+
     public Employee loginCheck(String employeeUsername, String employeePassword) {
 
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
@@ -97,7 +102,7 @@ public class EmployeeDAO implements Crudable<Employee> {
             Employee employee = new Employee();
 
             employee.setEmployeeUsername(resultSet.getString("e_username"));
-            employee.setEmployeeRole(UserRole.valueOf(resultSet.getString("e_role")));
+            employee.setEmployeeRole((Boolean) resultSet.getObject("e_role"));
             //employee.setEmployeeEmail(resultSet.getString("e_email"));
             //employee.setEmployeeName(resultSet.getString("e_name"));
             employee.setEmployeePassword(resultSet.getString("e_password"));
