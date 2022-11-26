@@ -4,7 +4,6 @@ import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Service.EmployeeService;
-import com.revature.project1.Service.RequestService;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,19 +13,16 @@ import java.util.List;
 
 public class RequestController {
 
-    RequestService requestService;
     EmployeeService employeeService;
-
-    RequestDAO requestDAO;
 
     Javalin app;
 
-    public RequestController(RequestService requestService, EmployeeService employeeService) {
-        this.requestService = requestService;
+    public RequestController(Javalin app, EmployeeService employeeService) {
         this.employeeService = employeeService;
+        this.app = app;
     }
 
-    public void requestEndpoint(Javalin app) {
+    public void requestEndpoint() {
 
 
         app.post("submit", this::postSubmitRequestHandler);
@@ -40,7 +36,8 @@ public class RequestController {
     private void postSubmitRequestHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Requests request = mapper.readValue(context.body(), Requests.class);
-        int temp = requestService.submitRequest(request);
+        int temp = employeeService.submitRequest(request);
+        RequestDAO requestDAO = new RequestDAO();
 
         if (temp==1) {
             context.json("You must be signed in to submit a request.");}
@@ -54,7 +51,7 @@ public class RequestController {
     private void viewPreviousRequestsHandler(Context context){
         if (employeeService.getSessionEmployee() != null) {
             Employee employee = employeeService.getSessionEmployee();
-            List<Requests> previousRequests = requestService.viewPreviousTickets(employee);
+            List<Requests> previousRequests = employeeService.viewPreviousTickets(employee);
             if (previousRequests != null) {
                 context.json(previousRequests);
             } else {context.json("We could not retrieve you previous submissions.");}

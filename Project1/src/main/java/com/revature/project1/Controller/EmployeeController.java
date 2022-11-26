@@ -3,6 +3,7 @@ package com.revature.project1.Controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.project1.DAO.EmployeeDAO;
+import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Service.EmployeeService;
 import com.revature.project1.Util.DTO.LoginCreds;
@@ -13,8 +14,8 @@ import java.lang.Object;
 public class EmployeeController {
     EmployeeService employeeService;
     Javalin app;
-    public EmployeeController(Javalin app){
-        employeeService = new EmployeeService(new EmployeeDAO());
+    public EmployeeController(Javalin app, EmployeeService employeeService){
+        this.employeeService = new EmployeeService(new EmployeeDAO(), new RequestDAO());
         this.app = app;
     }
     public void employeeEndpoint(){
