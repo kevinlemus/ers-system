@@ -17,8 +17,6 @@ public interface Crudable<T> {
 
     Requests findByRequestID(int requestID);
 
-    Requests findByRequestType(Requests requestType);
-
     // Update
     boolean update(T updatedObject);
 
@@ -27,4 +25,6 @@ public interface Crudable<T> {
     boolean delete(String deletedObject);
 
     boolean delete(int requestID);
+
+    Requests findByRequestType(Requests requestType);
 }

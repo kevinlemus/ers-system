@@ -6,7 +6,7 @@ public class Requests {
         private String requestStatus;
         private int requestAmount;
         private String requestType;
-        private Employee requestRequester;
+        private String employee;
 
         public Requests() {
         }
@@ -16,7 +16,7 @@ public class Requests {
             this.requestStatus = requestStatus;
             this.requestAmount = requestAmount;
             this.requestType = requestType;
-            this.requestRequester = requestRequester;
+            this.employee = employee;
         }
 
 
@@ -45,11 +45,17 @@ public class Requests {
 
         public void setRequestType(String r_type) { this.requestType = requestType; }
 
-        public Employee getRequestRequester() { return requestRequester; }
+        public String getEmployee() { return employee; }
 
-        public void setRequestRequester(Employee requestRequester) { this.requestRequester = requestRequester; }
+        public void setEmployee(String employee) { this.employee = employee; }
+}
 
+       /* public String isApproved(){
+        return "APPROVED";}
 
+        public String isDenied(){
+            return "DENIED";}
 
-
-        }
+        public String isPending(){
+            return "PENDING";}
+        }*/

@@ -70,10 +70,10 @@ public class Employee {
     }
 
     public boolean isValidInput(Employee employee ) {
-            return (employeeUsername!= null) & (employeePassword != null);}
+        return (employeeUsername!= null) & (employeePassword != null);}
 
     public boolean isBlank(Employee employee) {
-            return ((employeeUsername.isBlank()) || (employeePassword.isBlank()) || (employeeUsername.isBlank() && employeePassword.isBlank()));
+        return ((employeeUsername.isBlank()) || (employeePassword.isBlank()) || (employeeUsername.isBlank() && employeePassword.isBlank()));
 
     }
 
@@ -90,6 +90,4 @@ public class Employee {
                         ", EmployeeEmail='" + employeeEmail +
                         ", EmployeeRole=" + employeeRole +
                         '}';
-        }
-
- }
+    }}

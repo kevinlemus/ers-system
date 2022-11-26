@@ -28,7 +28,7 @@ public class EmployeeDAO implements Crudable<Employee> {
             // set the information for the ?
             preparedStatement.setString(1, newEmployee.getEmployeeUsername());
             //preparedStatement.setString(3, newEmployee.getEmployeeEmail());
-           // preparedStatement.setString(4, newEmployee.getEmployeeName());
+            // preparedStatement.setString(4, newEmployee.getEmployeeName());
             preparedStatement.setString(2, newEmployee.getEmployeePassword());
             preparedStatement.setBoolean(3, newEmployee.getEmployeeRole());
 
@@ -116,7 +116,3 @@ public class EmployeeDAO implements Crudable<Employee> {
 
     }
 }
-
-
-
-

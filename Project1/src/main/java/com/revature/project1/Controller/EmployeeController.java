@@ -22,22 +22,13 @@ public class EmployeeController {
         app.post("register",this::postRegisterEmployeeHandler);
         //app.get("allEmployees", this::getAllEmployeeHandler);
         //app.get("employee/{employeeUsername}",this::getSpecificEmployeeHandler);
-       // app.post("employee/request", this::getPostRequestHandler);
+        // app.post("employee/request", this::getPostRequestHandler);
         app.post("login", this::loginHandler);
         app.delete("logout", this::logoutHandler);
     }
     private void postRegisterEmployeeHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Employee employee = mapper.readValue(context.body(), Employee.class);
-      //  int temp = employeeService.registerEmployee(newEmployee);
-    //    if (temp == 1){
-     //       context.json("This username has already been taken. Please try again with a different username.");
-     //   }
-      //  else if(temp == 2){
-      //      context.json(String.format("Your username " + newEmployee.getEmployeeUsername() + ", has been registered!"));
-     //   }
-        //if(!employee.isValidInput(employee)) {context.json("You have not been registered");
-       // return;}
         if(employee.isBlank(employee)){context.json("This username is invalid. Please try again.");}
         //if(employeeService.registerEmployee(employee).isExistingEmployee(employee)) context.json("This username has already been taken. Please try again with a different username.");
         else if (employeeService.registerEmployee(employee)==null) {context.json("This username has already been registered! Please try signing in with a different username.");
@@ -52,34 +43,12 @@ public class EmployeeController {
     }
 
     private void logoutHandler(Context context){
-        String employeeUsername = employeeService.getSessionEmployee().getEmployeeUsername();
+        Employee sessionEmployee = employeeService.getSessionEmployee();
+        if (sessionEmployee == null) {
+            context.json("Must be signed in to log out.");
+        return;}
+        String employeeUsername = sessionEmployee.getEmployeeUsername();
         employeeService.logout();
         context.json(employeeUsername + " has logged out");
-    }
-
-
-}
-
-//public void helloHandler(Context ctx){
-//ctx.result("hello world");
-// }
-
-//private void getSpecificEmployeeHandler(Context context) {
-//String username = context.pathParam("username");
-// Employee employee = employeeService.getSpecificEmployee(username);
-//context.json(employee);
-// }
-
-// private void getPostRequestHandler(Context context) throws JsonProcessingException {
-//ObjectMapper mapper = new ObjectMapper();
-// Requests requestID = mapper.readValue(context.body(), Requests.class);
-// Requests requestType = employeeService.makeRequest(requestID);
-// context.json(requestType);
-
-//}
-
-// private void getAllEmployeeHandler(Context context) {
-//List<Employee> allEmployees = employeeService.getAllEmployee();
-//        similar as context.result, but the content type is json rather than text.
-//   context.json(allEmployees);
-//}
+        return;
+    }}
