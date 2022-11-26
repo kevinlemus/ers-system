@@ -38,6 +38,25 @@ import java.util.List;
                 return null;
             }
         }
+        public List<Requests> viewPreviousRequests(Employee employee) {
+            List<Requests> previousRequests = new ArrayList<>();
+
+            try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+                String sql = "select * from requests where r_requester = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, employee.getEmployeeUsername());
+                ResultSet resultSet = preparedStatement.executeQuery();
+
+                while (resultSet.next()) {
+                    previousRequests.add(convertSQLtoRequest(resultSet));
+                }
+                return previousRequests;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
 
         @Override
         public List<Requests> findAll() {

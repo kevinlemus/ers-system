@@ -6,6 +6,8 @@ import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Util.DTO.LoginCreds;
 
+import java.util.List;
+
 public class RequestService {
 
     private Requests sessionRequest = null;
@@ -27,9 +29,7 @@ public class RequestService {
         return sessionEmployee;
     }
     public int submitRequest(Requests request){
-        try {
-            ;
-            int temp = 0;
+        try {int temp = 0;
             if (this.sessionEmployee == null) {
                 temp = 1; //must be logged in
             } else if (request.getRequestAmount() != 0 && request.getRequestType() != null) {
@@ -48,6 +48,10 @@ public class RequestService {
             System.out.println("request does not exist");
         }
      return 0;
+    }
+
+    public List<Requests> viewPreviousTickets(Employee employee){
+        return requestDAO.viewPreviousRequests(employee);
     }
 
 

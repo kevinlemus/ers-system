@@ -10,6 +10,8 @@ import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.List;
+
 public class RequestController {
 
     RequestService requestService;
@@ -28,10 +30,10 @@ public class RequestController {
 
 
         app.post("submit", this::postSubmitRequestHandler);
-        /*app.get("request/findByStatus", this::getRequestByStatusHandler);
-        app.get("request/allEmployeeRequests", this::getAllRequestsforEmployeeHandler);
-        app.get("request/allManagerRequests", this::getAllRequestsforManagerHandler);
-        app.post("request/processStatus", this::postProcessRequestStatus);*/
+        //app.get("request/findByStatus", this::getRequestByStatusHandler);
+        app.get("request/allEmployeeRequests", this::viewPreviousRequestsHandler);
+        //app.get("request/allManagerRequests", this::getAllRequestsforManagerHandler);
+        //app.post("request/processStatus", this::postProcessRequestStatus);*/
 
     }
 
@@ -47,8 +49,17 @@ public class RequestController {
                 context.json("Your request has been submitted.");}
         else if(temp==3){
             context.json("Your request has not been submitted.");
-        }
+        }}
 
+    private void viewPreviousRequestsHandler(Context context){
+        if (employeeService.getSessionEmployee() != null) {
+            Employee employee = employeeService.getSessionEmployee();
+            List<Requests> previousRequests = requestService.viewPreviousTickets(employee);
+            if (previousRequests != null) {
+                context.json(previousRequests);
+            } else {context.json("We could not retrieve you previous submissions.");}
+        }else{context.json("Please sign in to access your information.");}
+    }
 
 
 
@@ -92,4 +103,4 @@ public class RequestController {
     private void postProcessRequestStatus(Context context) {
      ;
     }*/
-        }}
+        }
