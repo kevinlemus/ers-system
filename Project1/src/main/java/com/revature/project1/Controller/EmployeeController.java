@@ -5,17 +5,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.revature.project1.DAO.EmployeeDAO;
 import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
+import com.revature.project1.Models.Requests;
 import com.revature.project1.Service.EmployeeService;
 import com.revature.project1.Util.DTO.LoginCreds;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.lang.Object;
+import java.sql.SQLOutput;
 
 public class EmployeeController {
     EmployeeService employeeService;
     Javalin app;
     public EmployeeController(Javalin app, EmployeeService employeeService){
-        this.employeeService = new EmployeeService(new EmployeeDAO(), new RequestDAO());
+        this.employeeService = employeeService;
         this.app = app;
     }
     public void employeeEndpoint(){
@@ -26,6 +28,8 @@ public class EmployeeController {
         // app.post("employee/request", this::getPostRequestHandler);
         app.post("login", this::loginHandler);
         app.delete("logout", this::logoutHandler);
+
+
     }
     private void postRegisterEmployeeHandler(Context context) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
@@ -41,6 +45,7 @@ public class EmployeeController {
         LoginCreds loginCreds = mapper.readValue(context.body(), LoginCreds.class);
         if(employeeService.login(loginCreds)== null)context.json("The information you provided was incorrect. Please try again.");//
         else context.json("You have successfully logged in!");
+
     }
 
     private void logoutHandler(Context context){
@@ -52,4 +57,7 @@ public class EmployeeController {
         employeeService.logout();
         context.json(employeeUsername + " has logged out");
         return;
-    }}
+    }
+
+
+}

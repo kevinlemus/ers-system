@@ -1,26 +1,28 @@
 package com.revature.project1.Util.DTO;
-
+import com.fasterxml.jackson.annotation.JsonAlias;
 public class RequestSubmit {
 
+@JsonAlias(value = {"r_id",})
+    private int requestID;
+@JsonAlias(value = {"r_status",})
+    private String requestStatus;
 
-    private String requestID;
-    private String requestRequester;
+    public RequestSubmit() {}
 
-
-    public String getRequestID() {
+    public int getRequestID() {
         return requestID;
     }
 
-    public void setRequestID(String requestID) {
+    public void setRequestID(int requestID) {
         this.requestID = requestID;
     }
 
-    public String getRequestRequester() {
-        return requestRequester;
+    public String getRequestStatus() {
+        return requestStatus;
     }
 
-    public void setRequestRequester(String requestRequester) {
-        this.requestRequester = requestRequester;
+    public void setRequestStatus(String requestStatus) {
+        this.requestStatus = requestStatus;
     }
 
 }

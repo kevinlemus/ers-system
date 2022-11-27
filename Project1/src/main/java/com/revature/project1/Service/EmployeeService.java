@@ -5,6 +5,7 @@ import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Util.DTO.LoginCreds;
+import com.revature.project1.Util.DTO.RequestSubmit;
 import org.eclipse.jetty.http.MetaData;
 
 import java.sql.SQLOutput;
@@ -14,6 +15,8 @@ import java.util.List;
 public class EmployeeService {
 
     private Employee sessionEmployee = null;//defaults an inactive website user
+
+    private Requests sessionRequest = null;
     private final EmployeeDAO employeeDAO;
     private final RequestDAO requestDAO;
 
@@ -48,14 +51,15 @@ public class EmployeeService {
 
 
     public int submitRequest(Requests request){
-        Employee sessionEmployee = this.getSessionEmployee();
-        System.out.println(sessionEmployee);
+      try{
+          Employee requestRequester = this.getSessionEmployee();
+          System.out.println(sessionEmployee);
             int temp = 0;
             if (sessionEmployee == null) {
                 temp = 1; //must be logged in
             } else if (request.getRequestAmount() != 0 && request.getRequestType() != null) {
                 request.setRequestStatus("pending");
-                request.setEmployee(sessionEmployee.getEmployeeUsername());
+                request.setRequestRequester(requestRequester.getEmployeeUsername());
                 request.setRequestID(requestCount++);
                 requestDAO.create(request);
                 temp = 2; //success
@@ -63,11 +67,19 @@ public class EmployeeService {
                 temp = 3; //must have amount and type
             }
             return temp;
-    }
+    }  catch (RuntimeException r){
+          r.printStackTrace();
+      }return 0;}
 
     public List<Requests> viewPreviousTickets(Employee employee){
         return requestDAO.viewPreviousRequests(employee);
     }
+
+    public boolean isNotManager() {
+        if (this.sessionEmployee == null) return true;
+        return !this.sessionEmployee.getEmployeeRole();
+    }
+
 
 
     public void removeEmployee(String employeeUsername){
@@ -81,6 +93,17 @@ public class EmployeeService {
     public Requests makeRequest(Requests request) {
         return null;
     }
+
+    public RequestSubmit processRequestUpdate (RequestSubmit update){
+        return this.requestDAO.updateTicket(update);
+    }
+
+   /* public List<Requests> getPendingRequests (Requests request){
+        if(sessionEmployee == null || !sessionEmployee.isManager()){
+            return null;
+        }
+        return requestDAO.pending
+    }*/
 
 
 

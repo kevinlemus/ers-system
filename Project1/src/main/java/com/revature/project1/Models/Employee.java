@@ -78,8 +78,8 @@ public class Employee {
     }
 
 
-    public boolean isValidUser() {
-        return (this.employeeUsername != null) & (this.employeePassword != null);
+    public boolean isManager() {
+        return true;
     }
 
     @Override

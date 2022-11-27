@@ -6,17 +6,16 @@ public class Requests {
         private String requestStatus;
         private int requestAmount;
         private String requestType;
-        private String employee;
+        private String requestRequester;
 
-        public Requests() {
-        }
+        public Requests() {}
 
-        public Requests(int requestID, String requestStatus, int requestAmount, String requestType, Employee requestRequester) {
+        public Requests(int requestID, String requestStatus, int requestAmount, String requestType, String requestRequester) {
             this.requestID = requestID;
             this.requestStatus = requestStatus;
             this.requestAmount = requestAmount;
             this.requestType = requestType;
-            this.employee = employee;
+            this.requestRequester = requestRequester;
         }
 
 
@@ -45,9 +44,9 @@ public class Requests {
 
         public void setRequestType(String r_type) { this.requestType = requestType; }
 
-        public String getEmployee() { return employee; }
+        public String getRequestRequester() { return requestRequester; }
 
-        public void setEmployee(String employee) { this.employee = employee; }
+        public void setRequestRequester(String requestRequester) { this.requestRequester = requestRequester; }
 }
 
        /* public String isApproved(){

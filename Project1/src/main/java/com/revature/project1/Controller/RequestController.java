@@ -4,6 +4,7 @@ import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Service.EmployeeService;
+import com.revature.project1.Util.DTO.RequestSubmit;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,28 +26,13 @@ public class RequestController {
     public void requestEndpoint() {
 
 
-        app.post("submit", this::postSubmitRequestHandler);
         //app.get("request/findByStatus", this::getRequestByStatusHandler);
         app.get("request/allEmployeeRequests", this::viewPreviousRequestsHandler);
         //app.get("request/allManagerRequests", this::getAllRequestsforManagerHandler);
-        //app.post("request/processStatus", this::postProcessRequestStatus);*/
-
+        app.post("request/processStatus", this::postProcessRequestStatusHandler);
+        app.post("submit", this::postSubmitRequestHandler);
     }
 
-    private void postSubmitRequestHandler(Context context) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        Requests request = mapper.readValue(context.body(), Requests.class);
-        int temp = employeeService.submitRequest(request);
-        RequestDAO requestDAO = new RequestDAO();
-
-        if (temp==1) {
-            context.json("You must be signed in to submit a request.");}
-        else if (temp==2) {
-                requestDAO.create(request);
-                context.json("Your request has been submitted.");}
-        else if(temp==3){
-            context.json("Your request has not been submitted.");
-        }}
 
     private void viewPreviousRequestsHandler(Context context){
         if (employeeService.getSessionEmployee() != null) {
@@ -58,8 +44,34 @@ public class RequestController {
         }else{context.json("Please sign in to access your information.");}
     }
 
+    private void postProcessRequestStatusHandler(Context context) throws JsonProcessingException {
+        if (this.employeeService.isNotManager()) {
+            context.json("You are not authorized to view this page.");
+            return;}
 
+        ObjectMapper mapper = new ObjectMapper();
+        RequestSubmit update = mapper.readValue(context.body(), RequestSubmit.class);
+        if(this.employeeService.processRequestUpdate(update) == null)context.json("This request was not updated.");
+        else{context.json("This request has been updated.");}}
 
+    private void postSubmitRequestHandler(Context context) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Requests request = mapper.readValue(context.body(), Requests.class);
+        int temp = employeeService.submitRequest(request);
+        //RequestDAO requestDAO = new RequestDAO();
+
+        if (temp==1) {
+            context.json("You must be signed in to submit a request.");}
+        else if (temp==2) {
+            //      requestDAO.create(request);
+            context.json("Your request has been submitted.");}
+        else if(temp==3){
+            context.json("Your request has not been submitted.");
+        }}
+
+    /*private void getPendingRequestsHandler(Context context){
+        List<Requests> pendingRequests = employeeService.getPendingRequests;
+        }*/
 
 
         /*Employee employee = employeeService.getSessionEmployee();

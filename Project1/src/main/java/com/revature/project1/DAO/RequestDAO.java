@@ -4,6 +4,7 @@ import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Service.EmployeeService;
 import com.revature.project1.Util.ConnectionFactory;
+import com.revature.project1.Util.DTO.RequestSubmit;
 import com.revature.project1.Util.Interface.Crudable;
 
 import java.sql.*;
@@ -27,7 +28,7 @@ import java.util.List;
                 //preparedStatement.setString(2, newRequest.getRequestStatus());
                 preparedStatement.setInt(1, newRequest.getRequestAmount());
                 preparedStatement.setString(2, newRequest.getRequestType());
-                preparedStatement.setString(3, newRequest.getEmployee());
+                preparedStatement.setString(3, newRequest.getRequestRequester());
                 int checkInsert = preparedStatement.executeUpdate();
 
                 if(checkInsert == 0) { throw new RuntimeException("Request was not submitted.");}
@@ -58,6 +59,27 @@ import java.util.List;
             }
         }
 
+        public RequestSubmit updateTicket(RequestSubmit update) {
+            try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+
+                String sql = "update requests set r_status = " + update.getRequestStatus() + " where r_id =" + update.getRequestID();
+
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+                preparedStatement.setString(1, update.getRequestStatus());
+                preparedStatement.setInt(2, update.getRequestID());
+
+                if (preparedStatement.executeUpdate() == 0) throw new SQLException("This request has not bee processed.");
+
+                return update;
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+
         @Override
         public List<Requests> findAll() {
             return null;
@@ -67,6 +89,22 @@ import java.util.List;
         public Requests findByRequestID(int requestID) {
             return null;
         }
+
+        /*public List<Requests> getPendingRequests(){
+            List<Requests> requestList = new ArrayList<>();
+            try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+                String sql = "select * from requests where r_status = 'pending'";
+                PreparedStatement ps = connection.prepareStatement(sql);
+                ResultSet rs = ps.executeQuery();
+                while(rs.next()){
+                    requestList.add(convertSQLtoRequest());
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return requestList;
+        }*/
 
       /*  public List<Requests> findByStatus(Employee employee, Requests request){
             try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()){
@@ -147,7 +185,7 @@ import java.util.List;
             request.setRequestStatus(resultSet.getString("r_status"));
             request.setRequestAmount(resultSet.getInt("r_amount"));
             request.setRequestType(resultSet.getString("r_type"));
-            request.setEmployee(resultSet.getString("r_requester"));
+            request.setRequestRequester(resultSet.getString("r_requester"));
 
             return request;
 
