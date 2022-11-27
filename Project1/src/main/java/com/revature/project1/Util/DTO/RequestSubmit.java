@@ -2,9 +2,9 @@ package com.revature.project1.Util.DTO;
 import com.fasterxml.jackson.annotation.JsonAlias;
 public class RequestSubmit {
 
-@JsonAlias(value = {"r_id",})
+    @JsonAlias(value = {"r_id",})
     private int requestID;
-@JsonAlias(value = {"r_status",})
+    @JsonAlias(value = {"r_status",})
     private String requestStatus;
 
     public RequestSubmit() {}

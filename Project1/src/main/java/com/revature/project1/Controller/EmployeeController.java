@@ -52,7 +52,7 @@ public class EmployeeController {
         Employee sessionEmployee = employeeService.getSessionEmployee();
         if (sessionEmployee == null) {
             context.json("Must be signed in to log out.");
-        return;}
+            return;}
         String employeeUsername = sessionEmployee.getEmployeeUsername();
         employeeService.logout();
         context.json(employeeUsername + " has logged out");

@@ -14,7 +14,7 @@ public class Application {
        // RequestDAO requestDAO = new RequestDAO();
         //RequestService requestService = new RequestService(requestDAO);
 
-        Javalin app = Javalin.create().start(8080);
+        Javalin app = Javalin.create().start(8090);
 
         EmployeeService employeeService = new EmployeeService(new EmployeeDAO(), new RequestDAO());
 

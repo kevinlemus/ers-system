@@ -16,7 +16,6 @@ public class EmployeeService {
 
     private Employee sessionEmployee = null;//defaults an inactive website user
 
-    private Requests sessionRequest = null;
     private final EmployeeDAO employeeDAO;
     private final RequestDAO requestDAO;
 
@@ -26,6 +25,7 @@ public class EmployeeService {
     public EmployeeService(EmployeeDAO employeeDAO, RequestDAO requestDAO){
         this.employeeDAO = employeeDAO;
         this.requestDAO = requestDAO;
+        this.initializeRequestCount();
 
     }
 
@@ -51,27 +51,33 @@ public class EmployeeService {
 
 
     public int submitRequest(Requests request){
-      try{
-          Employee requestRequester = this.getSessionEmployee();
-          System.out.println(sessionEmployee);
+        try{
+            Employee requestRequester = this.getSessionEmployee();
+            System.out.println(sessionEmployee);
             int temp = 0;
-            if (sessionEmployee == null) {
+            if (requestRequester == null) {
                 temp = 1; //must be logged in
             } else if (request.getRequestAmount() != 0 && request.getRequestType() != null) {
                 request.setRequestStatus("pending");
                 request.setRequestRequester(requestRequester.getEmployeeUsername());
-                request.setRequestID(requestCount++);
+               // request.setRequestID(requestCount++);
                 requestDAO.create(request);
                 temp = 2; //success
             } else {
                 temp = 3; //must have amount and type
             }
             return temp;
-    }  catch (RuntimeException r){
-          r.printStackTrace();
-      }return 0;}
+        }  catch (RuntimeException r){
+            r.printStackTrace();
+        }return 0;}
 
-    public List<Requests> viewPreviousTickets(Employee employee){
+    private void initializeRequestCount() {
+        this.requestCount = this.requestDAO.getRowCount();
+        this.requestCount++;
+        System.out.println(this.requestCount);
+    }
+
+    public List<Requests> viewPreviousRequests(Employee employee){
         return requestDAO.viewPreviousRequests(employee);
     }
 
@@ -94,20 +100,16 @@ public class EmployeeService {
         return null;
     }
 
-    public RequestSubmit processRequestUpdate (RequestSubmit update){
-        return this.requestDAO.updateTicket(update);
+    public RequestSubmit updateRequest (RequestSubmit update){
+        return this.requestDAO.updateRequest(update);
     }
 
-   /* public List<Requests> getPendingRequests (Requests request){
-        if(sessionEmployee == null || !sessionEmployee.isManager()){
-            return null;
-        }
-        return requestDAO.pending
-    }*/
+    public List<Requests> getPendingRequests (){
+        return requestDAO.getPendingRequests();
+    }
 
 
 
     public void logout(){
         sessionEmployee = null;
     }}
-
