@@ -43,12 +43,6 @@ public class EmployeeService {
         return sessionEmployee;
     }
 
-
-    public boolean isManager(){
-        if(sessionEmployee==null) return false;
-        return !sessionEmployee.getEmployeeRole();
-    }
-
     public int submitRequest(Requests request){
         try{
             Employee requestRequester = this.getSessionEmployee();
@@ -61,7 +55,7 @@ public class EmployeeService {
                 request.setRequestRequester(requestRequester.getEmployeeUsername());
                 this.initializeRequestCount();
                 request.setRequestID(this.requestCount++);
-                //requestDAO.create(request);
+                requestDAO.create(request);
                 temp = 2; //success
             } else {
                 temp = 3; //must have amount and type
@@ -74,17 +68,27 @@ public class EmployeeService {
     private void initializeRequestCount() {
         this.requestCount = this.requestDAO.getRowCount();
         this.requestCount++;
-        System.out.println(this.requestCount);
+        //System.out.println(this.requestCount);
     }
 
-
+    public List<Requests> getPendingRequests (){
+        return requestDAO.getPendingRequests();
+    }
+    public void logout(){
+        sessionEmployee = null;
+    }
 
     public List<Requests> viewPreviousRequests(Employee employee){
         return requestDAO.viewPreviousRequests(employee);
     }
 
-    public List<Requests> viewRequestsByStatus(Employee employee, Requests request){
-        return requestDAO.findByStatus(employee, request);
+    public List<Requests> viewRequestByStatus(Employee employee, Requests request){
+        return requestDAO.viewRequestsByStatus(employee, request);
+    }
+
+    public boolean isManager() {
+        if (sessionEmployee == null) return false;
+        return !sessionEmployee.getEmployeeRole();
     }
 
     public boolean isNotManager() {
@@ -92,7 +96,9 @@ public class EmployeeService {
         return !this.sessionEmployee.getEmployeeRole();
     }
 
-
+    public RequestSubmit updateRequest (RequestSubmit update){
+        return this.requestDAO.updateRequest(update);
+    }
 
     public void removeEmployee(String employeeUsername){
 
@@ -101,21 +107,4 @@ public class EmployeeService {
     public List<Employee> getAllEmployee() {
         return null;
     }
-
-    public Requests makeRequest(Requests request) {
-        return null;
     }
-
-    public RequestSubmit updateRequest (RequestSubmit update){
-        return this.requestDAO.updateRequest(update);
-    }
-
-    public List<Requests> getPendingRequests (){
-        return requestDAO.getPendingRequests();
-    }
-
-
-
-    public void logout(){
-        sessionEmployee = null;
-    }}

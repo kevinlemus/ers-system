@@ -1,6 +1,5 @@
 package com.revature.project1.Controller;
 
-import com.revature.project1.DAO.RequestDAO;
 import com.revature.project1.Models.Employee;
 import com.revature.project1.Models.Requests;
 import com.revature.project1.Service.EmployeeService;
@@ -26,7 +25,7 @@ public class RequestController {
     public void requestEndpoint() {
 
 
-        app.get("request/findByStatus", this::getRequestByStatusHandler);
+        app.get("request/viewByStatus", this::viewRequestByStatusHandler);
         app.get("request/previousRequests", this::viewPreviousRequestsHandler);
         app.get("request/pending", this::getPendingRequestsHandler);
         app.post("request/updateRequest", this::postUpdateRequestStatusHandler);
@@ -84,21 +83,20 @@ public class RequestController {
         context.json(pendingRequests);
     }
 
-    private void getRequestByStatusHandler(Context context) throws JsonProcessingException {
-        Employee sessionEmployee = employeeService.getSessionEmployee();
-        Requests request = new Requests();
-        if (sessionEmployee == null) {
+    private void viewRequestByStatusHandler(Context context) {
+        if (employeeService.getSessionEmployee() != null) {
+            Employee employee = employeeService.getSessionEmployee();
+            Requests request = new Requests();
+            List<Requests> previousRequests = employeeService.viewRequestByStatus(employee, request);
+            if (previousRequests != null) {
+                context.json(previousRequests);
+            } else {
+                context.json("We could not retrieve your previous submissions.");
+            }
+        } else {
             context.json("Please sign in to access your information.");
-            return;
         }
-        List<Requests> requests = employeeService.viewRequestsByStatus(sessionEmployee, request);
-        if (request == null) {
-            context.json("You have not submitted any requests.");
-            return;
-        }
-        context.json(request);
     }
-
 
 
 
