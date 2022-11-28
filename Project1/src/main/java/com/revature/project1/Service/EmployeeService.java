@@ -49,19 +49,19 @@ public class EmployeeService {
         return !sessionEmployee.getEmployeeRole();
     }
 
-
     public int submitRequest(Requests request){
         try{
             Employee requestRequester = this.getSessionEmployee();
-            System.out.println(sessionEmployee);
+            //System.out.println(sessionEmployee);
             int temp = 0;
             if (requestRequester == null) {
                 temp = 1; //must be logged in
             } else if (request.getRequestAmount() != 0 && request.getRequestType() != null) {
                 request.setRequestStatus("pending");
                 request.setRequestRequester(requestRequester.getEmployeeUsername());
-               // request.setRequestID(requestCount++);
-                requestDAO.create(request);
+                this.initializeRequestCount();
+                request.setRequestID(this.requestCount++);
+                //requestDAO.create(request);
                 temp = 2; //success
             } else {
                 temp = 3; //must have amount and type
@@ -77,8 +77,14 @@ public class EmployeeService {
         System.out.println(this.requestCount);
     }
 
+
+
     public List<Requests> viewPreviousRequests(Employee employee){
         return requestDAO.viewPreviousRequests(employee);
+    }
+
+    public List<Requests> viewRequestsByStatus(Employee employee, Requests request){
+        return requestDAO.findByStatus(employee, request);
     }
 
     public boolean isNotManager() {

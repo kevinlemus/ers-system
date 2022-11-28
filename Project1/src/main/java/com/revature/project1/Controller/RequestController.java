@@ -26,7 +26,7 @@ public class RequestController {
     public void requestEndpoint() {
 
 
-        //app.get("request/findByStatus", this::getRequestByStatusHandler);
+        app.get("request/findByStatus", this::getRequestByStatusHandler);
         app.get("request/previousRequests", this::viewPreviousRequestsHandler);
         app.get("request/pending", this::getPendingRequestsHandler);
         app.post("request/updateRequest", this::postUpdateRequestStatusHandler);
@@ -55,6 +55,7 @@ public class RequestController {
         else{context.json("This request has been updated.");}}
 
     private void postSubmitRequestHandler(Context context) throws JsonProcessingException {
+
         ObjectMapper mapper = new ObjectMapper();
         Requests request = mapper.readValue(context.body(), Requests.class);
         int temp = employeeService.submitRequest(request);
@@ -70,7 +71,7 @@ public class RequestController {
         }}
 
     private void getPendingRequestsHandler(Context context) {
-        if (!this.employeeService.isManager()) {
+        if (this.employeeService.isManager()) {
             context.json("You are not authorized to access this information.");
             return;
         }
@@ -83,6 +84,23 @@ public class RequestController {
         context.json(pendingRequests);
     }
 
+    private void getRequestByStatusHandler(Context context) throws JsonProcessingException {
+        Employee sessionEmployee = employeeService.getSessionEmployee();
+        Requests request = new Requests();
+        if (sessionEmployee == null) {
+            context.json("Please sign in to access your information.");
+            return;
+        }
+        List<Requests> requests = employeeService.viewRequestsByStatus(sessionEmployee, request);
+        if (request == null) {
+            context.json("You have not submitted any requests.");
+            return;
+        }
+        context.json(request);
+    }
+
+
+
 
         /*Employee employee = employeeService.getSessionEmployee();
         if(employee == null) {context.json("You must be signed in to submit a request.");}
@@ -92,17 +110,6 @@ public class RequestController {
             context.json("Your request has not been submitted. Please try again.");
         else context.json("Your request has been submitted.");
     }
-    private void getRequestByStatusHandler(Context context) throws JsonProcessingException {
-        // if (requestService.isNotAManager()) {
-        //  context.json("You are not authorized to view this page.");
-        //    return;
-        /*Employee sessionEmployee = employeeService.getSessionEmployee();
-        Requests request = new Requests();
-        if (sessionEmployee == null) {context.json("Please sign in to access your information.");
-            return;}
-        List<Requests> requests = requestService.findByStatus(sessionEmployee, request);
-        if (request == null) {context.json("You have not submitted any tickets.");
-            return;}*/
 
 
 
