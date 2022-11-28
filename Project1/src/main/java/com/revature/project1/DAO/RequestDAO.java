@@ -8,6 +8,7 @@ import com.revature.project1.Util.Interface.Crudable;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RequestDAO implements Crudable<Requests>{
@@ -101,7 +102,32 @@ public class RequestDAO implements Crudable<Requests>{
             return 0;
         }}
 
-    public List<Requests> viewRequestsByStatus(Employee employee, Requests request) {
+    public List<Requests> getRequestByStatus(Employee employee, Requests request) {
+        try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()){
+            List<Requests> employeeRequests = new LinkedList<>();
+
+            String sql = " select * from requests where e_username = ? and r_status = ? order by requests.r_id";
+
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getEmployeeUsername());
+            preparedStatement.setString(2, request.getRequestStatus());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while(resultSet.next()){
+                employeeRequests.add(convertSQLtoRequest(resultSet, employee));
+            }
+
+            return employeeRequests;
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+
+    /*public List<Requests> viewRequestsByStatus(Employee employee, Requests request) {
         List<Requests> previousRequests = new ArrayList<>();
 
         try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
@@ -120,12 +146,73 @@ public class RequestDAO implements Crudable<Requests>{
             e.printStackTrace();
             return null;
         }
+    }*/
+    public List<Requests> approvedPersonalRequests(Employee employee) {
+        List<Requests> personalRequests = new ArrayList<>();
+
+        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+            String sql = "select * from requests where r_requester = ? and r_status = 'approved'";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getEmployeeUsername());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                personalRequests.add(convertSQLtoRequest(resultSet, employee));
+            }
+            return personalRequests;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
+    public List<Requests> deniedPersonalRequests(Employee employee) {
+        List<Requests> personalRequests = new ArrayList<>();
+
+        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+            String sql = "select * from request where r_requester = ? and r_status = 'denied'";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getEmployeeUsername());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                personalRequests.add(convertSQLtoRequest(resultSet, employee));
+            }
+            return personalRequests;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Requests> pendingPersonalRequests(Employee employee) {
+        List<Requests> personalRequests = new ArrayList<>();
+
+        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
+            String sql = "select * from requests where r_requester = ? and r_status = 'pending'";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, employee.getEmployeeUsername());
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                personalRequests.add(convertSQLtoRequest(resultSet, employee));
+            }
+            return personalRequests;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 
         public List<Requests> getPendingRequests(){
             List<Requests> requestList = new ArrayList<>();
             try(Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
-                String sql = " select * from requests join employee on employee.e_username = requests.r_requester where requests.r_status = 'pending' order by requests.r_id ";
+                String sql = "select * from requests join employee on employee.e_username = requests.r_requester where requests.r_status = 'pending' order by requests.r_id ";
                 PreparedStatement ps = connection.prepareStatement(sql);
                 ResultSet resultSet = ps.executeQuery();
                 while(resultSet.next()){
@@ -136,8 +223,6 @@ public class RequestDAO implements Crudable<Requests>{
             }
             return requestList;
         }
-
-
 
     private Requests convertSQLtoRequest(ResultSet resultSet, Employee employee) throws SQLException{
         Requests request = new Requests();

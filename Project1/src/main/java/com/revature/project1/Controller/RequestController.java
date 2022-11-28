@@ -25,7 +25,9 @@ public class RequestController {
     public void requestEndpoint() {
 
 
-        app.get("request/viewByStatus", this::viewRequestByStatusHandler);
+        app.get("request/personalApproved", this::viewApprovedPersonalRequestsHandler);
+        app.get("request/personalDenied", this::viewDeniedPersonalRequestsHandler);
+        app.get("request/personalPending", this::viewPendingPersonalRequestsHandler);
         app.get("request/previousRequests", this::viewPreviousRequestsHandler);
         app.get("request/pending", this::getPendingRequestsHandler);
         app.post("request/updateRequest", this::postUpdateRequestStatusHandler);
@@ -83,21 +85,47 @@ public class RequestController {
         context.json(pendingRequests);
     }
 
-    private void viewRequestByStatusHandler(Context context) {
+    private void viewPendingPersonalRequestsHandler(Context context) throws JsonProcessingException {
         if (employeeService.getSessionEmployee() != null) {
             Employee employee = employeeService.getSessionEmployee();
-            Requests request = new Requests();
-            List<Requests> previousRequests = employeeService.viewRequestByStatus(employee, request);
-            if (previousRequests != null) {
-                context.json(previousRequests);
+            List<Requests> personalRequests = employeeService.pendingPersonalRequests(employee);
+            if (personalRequests != null) {
+                context.json(personalRequests);
             } else {
-                context.json("We could not retrieve your previous submissions.");
+                context.json("There was an error retrieving personal pending requests.");
             }
         } else {
-            context.json("Please sign in to access your information.");
+            context.json("You must be logged in to view your pending requests");
         }
     }
 
+    private void viewApprovedPersonalRequestsHandler(Context context) {
+        if (employeeService.getSessionEmployee() != null) {
+            Employee employee = employeeService.getSessionEmployee();
+            List<Requests> personalRequests = employeeService.approvedPersonalRequests(employee);
+            if (personalRequests != null) {
+                context.json(personalRequests);
+            } else {
+                context.json("There was an error retrieving personal approved requests.");
+            }
+        } else {
+            context.json("You must be logged in to view your approved requests");
+        }
+    }
+
+    private void viewDeniedPersonalRequestsHandler(Context context){
+        if (employeeService.getSessionEmployee() != null) {
+            Employee employee = employeeService.getSessionEmployee();
+            List<Requests> personalRequests = employeeService.deniedPersonalRequests(employee);
+            if (personalRequests != null) {
+                context.json(personalRequests);
+            } else {
+                context.json("There was an error retrieving personal denied requests.");
+            }
+        } else {
+            context.json("You must be logged in to view your denied requests");
+        }
+    }
 
 
         /*Employee employee = employeeService.getSessionEmployee();

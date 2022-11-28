@@ -82,8 +82,16 @@ public class EmployeeService {
         return requestDAO.viewPreviousRequests(employee);
     }
 
-    public List<Requests> viewRequestByStatus(Employee employee, Requests request){
-        return requestDAO.viewRequestsByStatus(employee, request);
+    public List<Requests> approvedPersonalRequests(Employee employee) {
+        return requestDAO.approvedPersonalRequests(employee);
+    }
+
+    public List<Requests> deniedPersonalRequests(Employee employee) {
+        return requestDAO.deniedPersonalRequests(employee);
+    }
+
+    public List<Requests> pendingPersonalRequests(Employee employee) {
+        return requestDAO.pendingPersonalRequests(employee);
     }
 
     public boolean isManager() {
