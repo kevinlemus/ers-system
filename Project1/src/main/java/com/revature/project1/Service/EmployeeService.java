@@ -49,16 +49,16 @@ public class EmployeeService {
             //System.out.println(sessionEmployee);
             int temp = 0;
             if (requestRequester == null) {
-                temp = 1; //must be logged in
-            } else if (request.getRequestAmount() != 0 && request.getRequestType() != null) {
+                temp = 1; //must sign in to submit request
+            } else if (request.getRequestAmount() != 0 && request.getRequestType() != null){
                 request.setRequestStatus("pending");
                 request.setRequestRequester(requestRequester.getEmployeeUsername());
                 this.initializeRequestCount();
                 request.setRequestID(this.requestCount++);
                 requestDAO.create(request);
-                temp = 2; //success
+                temp = 2; //successful submission
             } else {
-                temp = 3; //must have amount and type
+                temp = 3; //must have an amount and type
             }
             return temp;
         }  catch (RuntimeException r){

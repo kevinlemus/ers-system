@@ -37,6 +37,7 @@ public class RequestDAO implements Crudable<Requests>{
             return null;
         }
     }
+
     public List<Requests> viewPreviousRequests(Employee employee) {
         List<Requests> previousRequests = new ArrayList<>();
 
@@ -78,7 +79,6 @@ public class RequestDAO implements Crudable<Requests>{
         }
     }
 
-
     @Override
     public Requests findByRequestID(int requestID) {
         return null;
@@ -93,7 +93,7 @@ public class RequestDAO implements Crudable<Requests>{
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (!resultSet.next()) throw new SQLException("Unable to get row count/no rows exist.");
+            if (!resultSet.next()) throw new SQLException("This row count does not exist.");
 
             return resultSet.getInt("max");
 
@@ -125,28 +125,6 @@ public class RequestDAO implements Crudable<Requests>{
         }
     }
 
-
-
-    /*public List<Requests> viewRequestsByStatus(Employee employee, Requests request) {
-        List<Requests> previousRequests = new ArrayList<>();
-
-        try (Connection connection = ConnectionFactory.getConnectionFactory().getConnection()) {
-            String sql = "select * from requests where r_requester = ? and r_status = ?";
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, employee.getEmployeeUsername());
-            preparedStatement.setString(2,request.getRequestStatus());
-            ResultSet resultSet = preparedStatement.executeQuery();
-
-            while (resultSet.next()) {
-                previousRequests.add(convertSQLtoRequest(resultSet, employee));
-            }
-            return previousRequests;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }*/
     public List<Requests> approvedPersonalRequests(Employee employee) {
         List<Requests> personalRequests = new ArrayList<>();
 

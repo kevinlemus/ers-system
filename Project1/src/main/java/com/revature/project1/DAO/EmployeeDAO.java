@@ -5,7 +5,6 @@ import com.revature.project1.Models.Requests;
 import com.revature.project1.Util.ConnectionFactory;
 import com.revature.project1.Util.Exceptions.InvalidEmployeeInputException;
 import com.revature.project1.Util.Interface.Crudable;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -46,6 +45,8 @@ public class EmployeeDAO implements Crudable<Employee> {
             return null;
         }
     }
+
+
 
     @Override
     public List<Employee> findAll() {
@@ -109,10 +110,11 @@ public class EmployeeDAO implements Crudable<Employee> {
 
             return employee;// a new session will begin with the information of the username and password that was inputted.
 
-        } catch (SQLException e) {
+        } catch(SQLException e){
             e.printStackTrace();
             return null;
         }
 
     }
+
 }

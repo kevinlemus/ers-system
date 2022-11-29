@@ -92,7 +92,7 @@ public class RequestController {
             if (personalRequests != null) {
                 context.json(personalRequests);
             } else {
-                context.json("There was an error retrieving personal pending requests.");
+                context.json("We could not find any pending requests.");
             }
         } else {
             context.json("You must be logged in to view your pending requests");
@@ -106,7 +106,7 @@ public class RequestController {
             if (personalRequests != null) {
                 context.json(personalRequests);
             } else {
-                context.json("There was an error retrieving personal approved requests.");
+                context.json("We could not find any approved requests.");
             }
         } else {
             context.json("You must be logged in to view your approved requests");
@@ -120,33 +120,10 @@ public class RequestController {
             if (personalRequests != null) {
                 context.json(personalRequests);
             } else {
-                context.json("There was an error retrieving personal denied requests.");
+                context.json("We could not find any denied requests.");
             }
         } else {
             context.json("You must be logged in to view your denied requests");
         }
     }
-
-
-        /*Employee employee = employeeService.getSessionEmployee();
-        if(employee == null) {context.json("You must be signed in to submit a request.");}
-        ObjectMapper mapper = new ObjectMapper();
-        Requests request = mapper.readValue(context.body(), Requests.class);
-        if (requestService.submitRequest(request) == null)
-            context.json("Your request has not been submitted. Please try again.");
-        else context.json("Your request has been submitted.");
-    }
-
-
-
- /*       context.json(request);
-    }
-    private void getAllRequestsforEmployeeHandler(Context context) {
-    }
-    private void getAllRequestsforManagerHandler(Context context) {
-        ;
-    }
-    private void postProcessRequestStatus(Context context) {
-     ;
-    }*/
 }

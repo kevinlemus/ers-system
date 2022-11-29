@@ -48,11 +48,3 @@ public class Requests {
 
     public void setRequestRequester(String requestRequester) { this.requestRequester = requestRequester; }
 }
-
-       /* public String isApproved(){
-        return "APPROVED";}
-        public String isDenied(){
-            return "DENIED";}
-        public String isPending(){
-            return "PENDING";}
-        }*/
